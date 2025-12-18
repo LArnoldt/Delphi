@@ -279,7 +279,7 @@ class Delphi(nn.Module):
             logits = self.lm_head(x[:, :, :]) # note: using list [-1] to preserve the time dim
             loss = None
 
-        return logits, loss, att
+        return logits, loss, att, x
 
     def crop_block_size(self, block_size):
         # model surgery to decrease the block size if necessary
@@ -379,7 +379,7 @@ class Delphi(nn.Module):
             max_new_tokens = 128
 
         for _ in range(max_new_tokens):
-            logits, _, _ = self(idx, age)
+            logits, _, _, _ = self(idx, age)
             logits = logits[:, -1, :]
             logits[:,self.config.ignore_tokens] = -torch.inf
 
